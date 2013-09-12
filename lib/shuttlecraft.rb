@@ -1,9 +1,9 @@
-#!/usr/bin/env ruby -w
-
 require 'rinda/ring'
-require File.dirname(__FILE__) + '/mothership'
 
-class ShuttleCraft
+class Shuttlecraft 
+
+  PROVIDER_TEMPLATE = [:name, :Mothership, nil, nil]
+  REGISTRATION_TEMPLATE = [:name, nil, nil]
 
   attr_accessor :ring_server, :mothership
 
@@ -18,7 +18,7 @@ class ShuttleCraft
   end
 
   def query_mothership
-    @mothership = ring_server.read(Mothership::PROVIDER_TEMPLATE)[2]
+    @mothership = ring_server.read(Shuttlecraft::PROVIDER_TEMPLATE)[2]
     @mothership = Rinda::TupleSpaceProxy.new @mothership
   end
   
@@ -29,9 +29,7 @@ class ShuttleCraft
   end
 
   def registered?
-    !@mothership.read_all(Mothership::REGISTRATION_TEMPLATE)
-      .detect{|t| t[1] == @name && t[2] == DRb.uri}
-      .nil?
+    !@mothership.read_all(Shuttlecraft::REGISTRATION_TEMPLATE).detect{|t| t[1] == @name && t[2] == DRb.uri}.nil?
   end
 
   def unregister
@@ -43,11 +41,10 @@ class ShuttleCraft
   def send_message(msg)
     @mothership.write([msg])
   end
-
 end
 
 if __FILE__ == $0
-  s = ShuttleCraft.new
+  s = Shuttlecraft.new
   s.register
 
   sleep(5)
