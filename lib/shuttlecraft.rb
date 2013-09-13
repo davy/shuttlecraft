@@ -5,7 +5,7 @@ class Shuttlecraft
   PROVIDER_TEMPLATE = [:name, :Mothership, nil, nil]
   REGISTRATION_TEMPLATE = [:name, nil, nil]
 
-  attr_accessor :ring_server, :mothership
+  attr_accessor :ring_server, :mothership, :name
 
   def initialize(name='foo')
     @drb = DRb.start_service
