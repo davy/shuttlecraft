@@ -17,12 +17,12 @@ class Shuttlecraft::Mothership
 
     notify_on_registration
     notify_on_unregistration
-   notify_on_write
- end
+    notify_on_write
+  end
 
   def registered_services
     @ts.read_all(Shuttlecraft::REGISTRATION_TEMPLATE).collect{|_,name,uri| [name,uri]}
- end
+  end
 
   def notify_on_registration
     @registration_observer = @ts.notify('write', Shuttlecraft::REGISTRATION_TEMPLATE)
