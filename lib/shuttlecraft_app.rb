@@ -1,13 +1,15 @@
 require 'shuttlecraft'
+
 begin
-  my_app = Shoes.app :width => 360, :height => 360, :resizeable => false do
+  my_app = Shoes.app :width => 360, :height => 360, :resizeable => false,
+   :title => 'Shuttlecraft' do
 
     @shuttlecraft = nil
 
     def display_screen
       clear do
         stack :margin => 20 do
-          title "Shuttlecraft"
+          title "Shuttlecraft #{@shuttlecraft.name}"
 
           stack do @status = para end
 
@@ -19,7 +21,7 @@ begin
     end
 
 
-    def registration_screen
+    def launch_screen
       clear do
         background black
         el = edit_line text: 'Name' do |s|
@@ -44,9 +46,9 @@ begin
       @shuttlecraft.unregister if @shuttlecraft
     end
 
-    registration_screen
+    launch_screen
   end
 
 ensure
-  my_app.unregister
+  my_app.unregister if my_app
 end

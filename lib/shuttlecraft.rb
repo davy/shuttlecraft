@@ -1,6 +1,6 @@
 require 'rinda/ring'
 
-class Shuttlecraft 
+class Shuttlecraft
 
   PROVIDER_TEMPLATE = [:name, :Mothership, nil, nil]
   REGISTRATION_TEMPLATE = [:name, nil, nil]
@@ -17,11 +17,17 @@ class Shuttlecraft
     query_mothership
   end
 
-  def query_mothership
-    @mothership = ring_server.read(Shuttlecraft::PROVIDER_TEMPLATE)[2]
-    @mothership = Rinda::TupleSpaceProxy.new @mothership
+  def find_all_motherships
+    ring_server.read_all(Shuttlecraft::PROVIDER_TEMPLATE).collect{|_,_,m,name| [name, m]}
   end
-  
+
+  def query_mothership(name=nil)
+    motherships = find_all_motherships
+
+    @mothership = motherships.detect{|m| m[0] == name} || motherships.first
+    @mothership = Rinda::TupleSpaceProxy.new @mothership[1] if @mothership
+  end
+
   def register
     unless registered?
       @mothership.write([:name, @name, DRb.uri])
