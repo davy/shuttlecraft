@@ -28,6 +28,7 @@ Shoes.app :width => 360, :height => 360, :resizeable => false,
   def launch_screen
     clear do
       background black
+      title "Build Mothership", stroke: white
       el = edit_line text: 'Name' do |s|
         @name = s.text
       end
