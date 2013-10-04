@@ -4,14 +4,8 @@ require 'rubygems'
 require 'shuttlecraft'
 
 class StubRingServer
-
-  def initialize
-  end
-
-  def read(*args)
-    return 'foo'
-  end
-
+  def initialize; end
+  def read(*args); return 'foo'; end
 end
 
 class StubMothership
@@ -47,14 +41,15 @@ class TestShuttlecraft < MiniTest::Unit::TestCase
 
 
   def setup
-    @shuttlecraft = Shuttlecraft.new
+    @shuttlecraft = Shuttlecraft.new('X-wing')
     @stub_mothership = StubMothership.new
-    @shuttlecraft.mothership = @stub_mothership 
+    @shuttlecraft.mothership = @stub_mothership
   end
 
 
-  def test_initialize_registered
+  def test_initialization
     assert_equal false, @shuttlecraft.registered?
+    assert_equal 'X-wing', @shuttlecraft.name
   end
 
   def test_registration
