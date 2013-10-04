@@ -45,7 +45,7 @@ begin
           for mothership in motherships
             button(mothership[0]) {
               begin
-                @shuttlecraft.initiate_communication_with(mothership[0])
+                @shuttlecraft.initiate_communication_with_mothership(mothership[0])
               rescue
                 initiate_comms_screen
               end

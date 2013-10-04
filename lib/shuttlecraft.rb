@@ -19,7 +19,7 @@ class Shuttlecraft
     ring_server.read_all(Shuttlecraft::PROVIDER_TEMPLATE).collect{|_,_,m,name| [name, m]}
   end
 
-  def initiate_communication_with(name=nil)
+  def initiate_communication_with_mothership(name=nil)
     motherships = find_all_motherships
 
     if name
@@ -56,6 +56,7 @@ end
 
 if __FILE__ == $0
   s = Shuttlecraft.new
+  s.initate_communication_with_mothership
   s.register
 
   sleep(5)
