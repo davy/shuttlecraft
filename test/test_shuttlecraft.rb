@@ -41,7 +41,7 @@ class TestShuttlecraft < MiniTest::Unit::TestCase
 
 
   def setup
-    @shuttlecraft = Shuttlecraft.new('X-wing')
+    @shuttlecraft = Shuttlecraft.new('Galileo')
     @stub_mothership = StubMothership.new
     @shuttlecraft.mothership = @stub_mothership
   end
