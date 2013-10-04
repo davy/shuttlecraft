@@ -1,8 +1,7 @@
 require 'shuttlecraft'
 
 begin
-  my_app = Shoes.app :width => 360, :height => 360, :resizeable => false,
-   :title => 'Shuttlecraft' do
+  my_app = Shoes.app width: 360, height: 360, resizeable: false, title: 'Shuttlecraft' do
 
     @shuttlecraft = nil
 
@@ -17,6 +16,7 @@ begin
           button("Unregister") { unregister }
         end
         animate(5) {@status.replace status_text}
+        animate(5) {@registrations.replace registrations_text}
       end
     end
 
@@ -43,9 +43,9 @@ begin
           motherships = @shuttlecraft.find_all_motherships
 
           for mothership in motherships
-            button(mothership[0]) {
+            button(mothership[:name]) {|b|
               begin
-                @shuttlecraft.initiate_communication_with_mothership(mothership[0])
+                @shuttlecraft.initiate_communication_with_mothership(b.text)
               rescue
                 initiate_comms_screen
               end
@@ -73,6 +73,10 @@ begin
 
     def unregister
       @shuttlecraft.unregister if @shuttlecraft
+    end
+
+    def registrations_text
+      @shuttlecraft.registered_services.join(', ') if @shuttlecraft
     end
 
     launch_screen

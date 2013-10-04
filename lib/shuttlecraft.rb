@@ -16,19 +16,24 @@ class Shuttlecraft
   end
 
   def find_all_motherships
-    ring_server.read_all(Shuttlecraft::PROVIDER_TEMPLATE).collect{|_,_,m,name| [name, m]}
+    ring_server.read_all(Shuttlecraft::PROVIDER_TEMPLATE).collect{|_,_,m,name| {name: name,ms: m}}
   end
 
   def initiate_communication_with_mothership(name=nil)
     motherships = find_all_motherships
 
     if name
-      @mothership = motherships.detect{|m| m[0] == name}
+      @mothership = motherships.detect{|m| m[:name] == name}
     else
       @mothership = motherships.first
     end
 
-    @mothership = Rinda::TupleSpaceProxy.new @mothership[1] if @mothership
+    @mothership = Rinda::TupleSpaceProxy.new @mothership[:ms] if @mothership
+  end
+
+  # duplicated from mothership
+  def registered_services
+    @mothership.read_all(Shuttlecraft::REGISTRATION_TEMPLATE).collect{|_,name,uri| [name,uri]}
   end
 
   def register
