@@ -2,12 +2,15 @@ require 'rinda/ring'
 
 class Shuttlecraft
 
-  PROVIDER_TEMPLATE = [:name, :Mothership, nil, nil]
-  REGISTRATION_TEMPLATE = [:name, nil, nil]
+  # [:name, :Mothership, name, Rinda::TupleSpace:tuplespace]
+  PROVIDER_TEMPLATE = [:name, :Mothership, String, nil]
+
+  # [:name, name, drb_uri]
+  REGISTRATION_TEMPLATE = [:name, String, String]
 
   attr_accessor :ring_server, :mothership, :name
 
-  def initialize(name='foo')
+  def initialize(name='Shuttlecraft')
     @drb = DRb.start_service
     puts "Starting DRb Service on #{@drb.uri}"
 
@@ -16,19 +19,22 @@ class Shuttlecraft
   end
 
   def find_all_motherships
-    ring_server.read_all(Shuttlecraft::PROVIDER_TEMPLATE).collect{|_,_,m,name| {name: name,ms: m}}
+    ring_server.read_all(Shuttlecraft::PROVIDER_TEMPLATE).collect{|_,_,name,ts| {name: name, ts: ts}}
   end
 
   def initiate_communication_with_mothership(name=nil)
     motherships = find_all_motherships
 
     if name
-      @mothership = motherships.detect{|m| m[:name] == name}
+      provider = motherships.detect{|m| m[:name] == name}
     else
-      @mothership = motherships.first
+      provider = motherships.first
     end
 
-    @mothership = Rinda::TupleSpaceProxy.new @mothership[:ms] if @mothership
+    if provider
+      @mothership = Rinda::TupleSpaceProxy.new provider[:ts]
+    end
+
   end
 
   # duplicated from mothership

@@ -14,7 +14,7 @@ class Shuttlecraft::Mothership
 
     @ts = Rinda::TupleSpace.new
 
-    @provider = Rinda::RingProvider.new(:Mothership, @ts, @name)
+    @provider = Rinda::RingProvider.new(:Mothership, @name, @ts)
     @provider.provide
 
     notify_on_registration
