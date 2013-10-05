@@ -72,6 +72,11 @@ begin
         stack do
           motherships = @shuttlecraft.find_all_motherships
 
+          if motherships.empty?
+            subtitle "No Motherships within range", stroke: white
+          else
+            subtitle "Select Mothership", stroke: white
+          end
           for mothership in motherships
             button(mothership[:name]) {|b|
               begin
@@ -83,9 +88,9 @@ begin
             }
           end
 
-          if motherships.empty?
-            subtitle "No Motherships within range", stroke: white
-          end
+          button('launch mothership') {
+            load File.dirname(__FILE__) + '/mothership_app.rb'
+          }
           button('rescan') {
             initiate_comms_screen
           }
