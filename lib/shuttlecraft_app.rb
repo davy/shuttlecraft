@@ -12,11 +12,38 @@ begin
 
           stack do @status = para end
 
-          button("Register") { register }
-          button("Unregister") { unregister }
+          @registered = nil
+          @updating_area = stack
         end
-        animate(5) {@status.replace status_text}
-        animate(5) {@registrations.replace registrations_text}
+
+        animate(5) {
+          if @shuttlecraft
+
+            detect_registration_change
+
+            if @registered
+              @registrations.replace registrations_text
+            end
+          end
+        }
+      end
+    end
+
+    def detect_registration_change
+      if @registered != @shuttlecraft.registered?
+        @registered = @shuttlecraft.registered?
+        @status.replace "#{"Not " unless @registered}Registered"
+        @updating_area.clear do
+          if @registered
+            button("Unregister") { unregister }
+            stack do
+              para 'Registered Services:'
+              @registrations = para
+            end
+          else
+            button("Register")    { register }
+          end
+        end
       end
     end
 
@@ -61,10 +88,6 @@ begin
           }
         end
       end
-    end
-
-    def status_text
-      "Registered? #{@shuttlecraft.registered? if @shuttlecraft}"
     end
 
     def register
