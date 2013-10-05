@@ -36,6 +36,9 @@ begin
         @updating_area.clear do
           if @registered
             button("Unregister") { unregister }
+            button("Broadcast") {
+              @shuttlecraft.broadcast("hello from #{@shuttlecraft.name}")
+            }
             stack do
               para 'Registered Services:'
               @registrations = para

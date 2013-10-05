@@ -16,6 +16,7 @@ class Shuttlecraft
 
     @ring_server = Rinda::RingFinger.primary
     @name = name
+    @receive_loop = nil
   end
 
   def find_all_motherships
@@ -33,8 +34,13 @@ class Shuttlecraft
 
     if provider
       @mothership = Rinda::TupleSpaceProxy.new provider[:ts]
-    end
 
+      @receive_loop = Thread.new do
+        loop do
+          handle_message @mothership.take message_template
+        end
+      end
+    end
   end
 
   # duplicated from mothership
@@ -60,9 +66,33 @@ class Shuttlecraft
     end
   end
 
-  def send_message(msg)
-    @mothership.write([msg])
+  def broadcast(msg_content)
+    for name,uri in registered_services
+      send_message uri, msg_content
+    end
   end
+
+  def send_message(recipient, msg_content)
+    msg = build_message recipient, DRb.uri, msg_content
+    @mothership.write(msg)
+  end
+
+  def handle_message(msg_content)
+    p msg_content
+  end
+
+  # template for messages sent to this shuttlecraft
+  def message_template
+    build_message(DRb.uri)
+  end
+
+  private
+
+  # can build a message or a message template
+  def build_message(recipient, sender=String, message=nil)
+    [:msg, recipient, sender, message]
+  end
+
 end
 
 if __FILE__ == $0
