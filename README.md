@@ -23,8 +23,13 @@ Run Mothership
 
         $ path/to/shoes lib/mothership_app.rb
         
-Run (multiple) Shuttlecrafts
+Run Shuttlecraft
 
         $ path/to/shoes lib/shuttlecraft_app.rb
         
 Play!
+
+* Run multiple Motherships or Shuttlecrafts
+* Shuttlecraft will ask which Mothership to connect to
+* Can rescan for Motherships if none are available initially
+* Broadcast a message to all running Shuttlecrafts registered with a Mothership
