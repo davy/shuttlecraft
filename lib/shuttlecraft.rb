@@ -11,7 +11,7 @@ class Shuttlecraft
   attr_accessor :ring_server, :mothership, :name
 
   def initialize(name='Shuttlecraft')
-    @drb = DRb.start_service
+    @drb = DRb.start_service(nil, self)
     puts "Starting DRb Service on #{@drb.uri}"
 
     @ring_server = Rinda::RingFinger.primary
@@ -65,34 +65,6 @@ class Shuttlecraft
       @mothership.take([:name, @name, DRb.uri])
     end
   end
-
-  def broadcast(msg_content)
-    for name,uri in registered_services
-      send_message uri, msg_content
-    end
-  end
-
-  def send_message(recipient, msg_content)
-    msg = build_message recipient, DRb.uri, msg_content
-    @mothership.write(msg)
-  end
-
-  def handle_message(msg_content)
-    p msg_content
-  end
-
-  # template for messages sent to this shuttlecraft
-  def message_template
-    build_message(DRb.uri)
-  end
-
-  private
-
-  # can build a message or a message template
-  def build_message(recipient, sender=String, message=nil)
-    [:msg, recipient, sender, message]
-  end
-
 end
 
 if __FILE__ == $0

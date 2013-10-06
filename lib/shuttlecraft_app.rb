@@ -1,7 +1,41 @@
 require 'shuttlecraft'
 
+
+class MyShuttlecraft < Shuttlecraft
+
+  attr_reader :msg_log
+
+  def initialize(name, app)
+    super(name)
+    @app = app
+    @msg_log = []
+  end
+  def broadcast(msg)
+    for name,uri in registered_services
+      begin
+        remote = DRbObject.new_with_uri(uri)
+        remote.say(msg, DRb.uri)
+      rescue DRb::DRbConnError
+      end
+    end
+  end
+
+  def say(msg, from)
+    @msg_log << msg
+    begin
+      remote = DRbObject.new_with_uri(from)
+      remote.message_reciept(@name)
+    rescue DRb::DRbConnError
+    end
+  end
+
+  def message_reciept(from)
+    puts "reciept from #{from}"
+  end
+end
+
 begin
-  my_app = Shoes.app width: 360, height: 360, resizeable: false, title: 'Shuttlecraft' do
+  @my_app = Shoes.app width: 360, height: 360, resizeable: false, title: 'Shuttlecraft' do
 
     @shuttlecraft = nil
 
@@ -14,6 +48,7 @@ begin
 
           @registered = nil
           @updating_area = stack
+          @msg_stack = stack
         end
 
         animate(5) {
@@ -23,6 +58,12 @@ begin
 
             if @registered
               @registrations.replace registrations_text
+
+              @msg_stack.clear do
+                for msg in @shuttlecraft.msg_log
+                  para msg
+                end
+              end
             end
           end
         }
@@ -58,7 +99,7 @@ begin
           @name = s.text
         end
         button('launch') {
-          @shuttlecraft = Shuttlecraft.new(@name)
+          @shuttlecraft = MyShuttlecraft.new(@name, @my_app)
           initiate_comms_screen
         }
       end
@@ -112,7 +153,6 @@ begin
 
     launch_screen
   end
-
 ensure
-  my_app.unregister if my_app
+  @my_app.unregister if @my_app
 end
