@@ -49,7 +49,7 @@ class TestShuttlecraft < MiniTest::Unit::TestCase
 
   def test_initialization
     assert_equal false, @shuttlecraft.registered?
-    assert_equal 'X-wing', @shuttlecraft.name
+    assert_equal 'Galileo', @shuttlecraft.name
   end
 
   def test_registration
