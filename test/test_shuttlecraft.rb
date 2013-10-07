@@ -24,7 +24,7 @@ class StubMothership
 
   def read_all(template)
     @tuples.map{|t,r| t}.select do |t|
-      template[1].nil? or t[1] == template[1]
+      template[1].nil? or template[1] === t[1]
     end
   end
 end
@@ -36,16 +36,13 @@ class Rinda::RingFinger
   end
 end
 
-
 class TestShuttlecraft < MiniTest::Unit::TestCase
-
 
   def setup
     @shuttlecraft = Shuttlecraft.new('Galileo')
     @stub_mothership = StubMothership.new
     @shuttlecraft.mothership = @stub_mothership
   end
-
 
   def test_initialization
     assert_equal false, @shuttlecraft.registered?
