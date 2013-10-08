@@ -10,19 +10,31 @@ class Shuttlecraft
   # [:name, name, drb_uri]
   REGISTRATION_TEMPLATE = [:name, String, String]
 
-  attr_accessor :ring_server, :mothership, :name
+  attr_accessor :ring_server, :mothership, :name, :protocol
 
-  def initialize(name='Shuttlecraft')
+  def initialize(opts={})
     @drb = DRb.start_service(nil, self)
     puts "Starting DRb Service on #{@drb.uri}"
 
+    @name = opts[:name] || self.default_name
+    @protocol = opts[:protocol] || Shuttlecraft::Protocol.default
+
     @ring_server = Rinda::RingFinger.primary
-    @name = name
     @receive_loop = nil
   end
 
+  def self.default_name
+    'Shuttlecraft'
+  end
+
+  def provider_template
+    temp = PROVIDER_TEMPLATE.dup
+    temp[1] = @protocol.service_name
+    temp
+  end
+
   def find_all_motherships
-    ring_server.read_all(Shuttlecraft::PROVIDER_TEMPLATE).collect{|_,_,name,ts| {name: name, ts: ts}}
+    ring_server.read_all(provider_template).collect{|_,_,name,ts| {name: name, ts: ts}}
   end
 
   def initiate_communication_with_mothership(name=nil)
@@ -64,6 +76,7 @@ class Shuttlecraft
 end
 
 require 'shuttlecraft/mothership'
+require 'shuttlecraft/protocol'
 require 'shuttlecraft/mothership_app'
 require 'shuttlecraft/shuttlecraft_app'
 

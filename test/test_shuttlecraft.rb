@@ -7,7 +7,7 @@ require 'test_shuttlecraft_helper'
 class TestShuttlecraft < MiniTest::Unit::TestCase
 
   def setup
-    @shuttlecraft = Shuttlecraft.new('Galileo')
+    @shuttlecraft = Shuttlecraft.new(name: 'Galileo')
     @shuttlecraft.mothership = TestShuttlecraftHelper::StubMothership.new
     @stub_mothership = @shuttlecraft.mothership
   end
@@ -15,6 +15,11 @@ class TestShuttlecraft < MiniTest::Unit::TestCase
   def test_initialization
     assert_equal false, @shuttlecraft.registered?
     assert_equal 'Galileo', @shuttlecraft.name
+    assert_equal :Mothership, @shuttlecraft.protocol.service_name
+  end
+
+  def test_uses_default_protocol
+    assert_equal Shuttlecraft::Protocol.default, @shuttlecraft.protocol
   end
 
   def test_registration

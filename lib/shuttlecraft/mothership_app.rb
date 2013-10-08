@@ -14,7 +14,7 @@ class Shuttlecraft::MothershipApp
             @name = s.text
           end
           button('launch') {
-            @mothership = Shuttlecraft::Mothership.new(@name)
+            @mothership = Shuttlecraft::Mothership.new(name: @name)
             display_screen
           }
         end

@@ -4,17 +4,18 @@ require 'shuttlecraft'
 
 class Shuttlecraft::Mothership
 
-  attr_reader :ts, :provider, :name
+  attr_reader :ts, :provider, :name, :protocol
 
-  def initialize(name='Mothership')
+  def initialize(opts={})
     @drb = DRb.start_service
     puts "Starting DRb Service on #{@drb.uri}"
 
-    @name = name
+    @protocol = opts[:protocol] || Shuttlecraft::Protocol.default
+    @name = opts[:name] || @protocol.name
 
     @ts = Rinda::TupleSpace.new
 
-    @provider = Rinda::RingProvider.new(:Mothership, @name, @ts)
+    @provider = Rinda::RingProvider.new(@protocol.service_name, @name, @ts)
     @provider.provide
 
     notify_on_registration

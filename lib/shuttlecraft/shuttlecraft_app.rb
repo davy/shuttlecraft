@@ -4,11 +4,11 @@ class MyShuttlecraft < Shuttlecraft
 
   attr_reader :msg_log
 
-  def initialize(name, app)
-    super(name)
-    @app = app
+  def initialize(opts={})
+    super(opts)
     @msg_log = []
   end
+
   def broadcast(msg)
     for name,uri in registered_services
       begin
@@ -83,6 +83,7 @@ class Shuttlecraft::ShuttlecraftApp
 
               button("Send") {
                 @shuttlecraft.broadcast(el.text)
+                el.text = ''
               }
               stack do
                 para 'Registered Services:'
@@ -103,7 +104,7 @@ class Shuttlecraft::ShuttlecraftApp
             @name = s.text
           end
           button('launch') {
-            @shuttlecraft = MyShuttlecraft.new(@name, @my_app)
+            @shuttlecraft = MyShuttlecraft.new(name: @name)
             initiate_comms_screen
           }
         end
