@@ -36,12 +36,6 @@ class Shuttlecraft
 
     if provider
       @mothership = Rinda::TupleSpaceProxy.new provider[:ts]
-
-      @receive_loop = Thread.new do
-        loop do
-          handle_message @mothership.take message_template
-        end
-      end
     end
   end
 
