@@ -2,18 +2,7 @@ require 'minitest/autorun'
 
 require 'rubygems'
 require 'shuttlecraft/mothership'
-
-class StubRingServer
-  def initialize; end
-  def read(*args); return 'foo'; end
-  def write(*args); return 'foo'; end
-end
-
-class Rinda::RingFinger
-  def primary
-    StubRingServer.new
-  end
-end
+require 'test_shuttlecraft_helper'
 
 class TestShuttlecraftMothership < MiniTest::Unit::TestCase
 

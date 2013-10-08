@@ -2,46 +2,14 @@ require 'minitest/autorun'
 
 require 'rubygems'
 require 'shuttlecraft'
-
-class StubRingServer
-  def initialize; end
-  def read(*args); return 'foo'; end
-end
-
-class StubMothership
-
-  def initialize
-    @tuples = []
-  end
-
-  def write(*args)
-    @tuples << args
-  end
-
-  def take(*args)
-    @tuples.delete(args)
-  end
-
-  def read_all(template)
-    @tuples.map{|t,r| t}.select do |t|
-      template[1].nil? or template[1] === t[1]
-    end
-  end
-end
-
-class Rinda::RingFinger
-
-  def primary
-     StubRingServer.new
-  end
-end
+require 'test_shuttlecraft_helper'
 
 class TestShuttlecraft < MiniTest::Unit::TestCase
 
   def setup
     @shuttlecraft = Shuttlecraft.new('Galileo')
-    @stub_mothership = StubMothership.new
-    @shuttlecraft.mothership = @stub_mothership
+    @shuttlecraft.mothership = TestShuttlecraftHelper::StubMothership.new
+    @stub_mothership = @shuttlecraft.mothership
   end
 
   def test_initialization
