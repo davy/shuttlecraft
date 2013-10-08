@@ -1,0 +1,16 @@
+.autotest
+History.txt
+LICENSE
+Manifest.txt
+README.md
+Rakefile
+bin/mothership_app
+bin/shuttlecraft_app
+lib/shuttlecraft.rb
+lib/shuttlecraft/mothership.rb
+lib/shuttlecraft/mothership_app.rb
+lib/shuttlecraft/shuttlecraft_app.rb
+ringserver.rb
+shuttlecraft.gemspec
+test/test_shuttlecraft.rb
+test/test_shuttlecraft_mothership.rb

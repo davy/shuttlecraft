@@ -15,7 +15,7 @@ class Rinda::RingFinger
   end
 end
 
-class TestMothership < MiniTest::Unit::TestCase
+class TestShuttlecraftMothership < MiniTest::Unit::TestCase
 
   def setup
     @mothership = Shuttlecraft::Mothership.new('Enterprise')

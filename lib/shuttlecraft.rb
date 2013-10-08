@@ -2,6 +2,8 @@ require 'rinda/ring'
 
 class Shuttlecraft
 
+  VERSION = '0.0.1'
+
   # [:name, :Mothership, name, Rinda::TupleSpace:tuplespace]
   PROVIDER_TEMPLATE = [:name, :Mothership, String, nil]
 
@@ -66,6 +68,10 @@ class Shuttlecraft
     end
   end
 end
+
+require 'shuttlecraft/mothership'
+require 'shuttlecraft/mothership_app'
+require 'shuttlecraft/shuttlecraft_app'
 
 if __FILE__ == $0
   s = Shuttlecraft.new

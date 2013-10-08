@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'shuttlecraft'
+
+Shuttlecraft::ShuttlecraftApp.run
