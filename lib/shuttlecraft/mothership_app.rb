@@ -35,7 +35,10 @@ class Shuttlecraft::MothershipApp
       end
 
       def registrations_text
-        @mothership.registered_services.join(', ') if @mothership
+        if @mothership
+          @mothership.update
+          @mothership.registered_services.join(', ')
+        end
       end
 
       launch_screen

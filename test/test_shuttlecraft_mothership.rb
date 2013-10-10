@@ -20,4 +20,44 @@ class TestShuttlecraftMothership < MiniTest::Unit::TestCase
     assert_equal Shuttlecraft::Protocol.default, @mothership.protocol
   end
 
+  def test_update_eh
+    assert @mothership.update?
+
+    refute @mothership.update?
+  end
+
+  def test_update
+    assert_empty @mothership.registered_services
+
+    make_registrations(%w[Davy Eric])
+
+    assert_empty @mothership.registered_services
+
+    assert @mothership.update
+    refute @mothership.update
+
+    assert_equal %w[Davy Eric], @mothership.registered_services.collect{|n,u| n}.sort
+  end
+
+  def test_update_bang
+    make_registrations(%w[Davy Eric])
+    assert @mothership.update
+
+    assert_equal %w[Davy Eric], @mothership.registered_services.collect{|n,u| n}.sort
+
+    make_registrations(%w[Davy Eric Rein])
+    assert @mothership.update!
+
+    assert_equal %w[Davy Eric Rein], @mothership.registered_services.collect{|n,u| n}.sort
+  end
+
+  def make_registrations regs
+
+    @@regs = regs
+
+    def @mothership.read_registered_services
+      @@regs.collect{|r| [r, DRb.uri]}
+    end
+  end
+
 end
