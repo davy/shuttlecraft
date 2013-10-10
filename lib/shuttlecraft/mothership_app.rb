@@ -1,5 +1,3 @@
-require 'shuttlecraft'
-
 class Shuttlecraft::MothershipApp
 
   def self.run

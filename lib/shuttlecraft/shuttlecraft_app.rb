@@ -1,5 +1,3 @@
-require 'shuttlecraft'
-
 class MyShuttlecraft < Shuttlecraft
 
   attr_reader :msg_log

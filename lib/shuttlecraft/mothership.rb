@@ -1,6 +1,5 @@
 require 'rinda/ring'
 require 'rinda/tuplespace'
-require 'shuttlecraft'
 
 class Shuttlecraft::Mothership
 
