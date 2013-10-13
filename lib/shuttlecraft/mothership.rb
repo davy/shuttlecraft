@@ -22,7 +22,10 @@ class Shuttlecraft::Mothership
 
     @ts = Rinda::TupleSpace.new
 
-    @provider = Rinda::RingProvider.new(@protocol.service_name, @name, @ts)
+    renewer = Rinda::SimpleRenewer.new 10
+
+    @provider =
+      Rinda::RingProvider.new(@protocol.service_name, @name, @ts, renewer)
     @provider.provide
 
     notify_on_registration
