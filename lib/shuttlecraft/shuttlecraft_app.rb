@@ -8,7 +8,7 @@ class MyShuttlecraft < Shuttlecraft
   end
 
   def broadcast(msg)
-    for name,uri in registered_services
+    for _, uri in registered_services
       begin
         remote = DRbObject.new_with_uri(uri)
         remote.say(msg, DRb.uri)
@@ -98,7 +98,7 @@ class Shuttlecraft::ShuttlecraftApp
         clear do
           background black
           title "Build Shuttlecraft", stroke: white
-          el = edit_line text: 'Name' do |s|
+          edit_line text: 'Name' do |s|
             @name = s.text
           end
           button('launch') {
