@@ -18,6 +18,22 @@ class TestShuttlecraft < MiniTest::Unit::TestCase
     assert_equal :Mothership, @shuttlecraft.protocol.service_name
   end
 
+  def test_each_service_uri
+    @stub_mothership.write [:name, 'name', DRb.uri]
+
+    e = @shuttlecraft.each_service_uri
+
+    assert_equal DRb.uri, e.next
+
+    uris = []
+
+    @shuttlecraft.each_service_uri do |uri|
+      uris << uri
+    end
+
+    refute_empty uris
+  end
+
   def test_uses_default_protocol
     assert_equal Shuttlecraft::Protocol.default, @shuttlecraft.protocol
   end
