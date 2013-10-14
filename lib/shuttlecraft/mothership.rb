@@ -11,7 +11,6 @@ class Shuttlecraft::Mothership
 
   def initialize(opts={})
     @drb = DRb.start_service
-    puts "Starting DRb Service on #{@drb.uri}"
 
     @protocol = opts[:protocol] || Shuttlecraft::Protocol.default
     @name = opts[:name] || @protocol.name
