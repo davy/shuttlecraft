@@ -1,9 +1,6 @@
-require 'minitest/autorun'
+require 'shuttlecraft/test'
 
-require 'rubygems'
-require 'shuttlecraft/protocol'
-
-class TestShuttlecraftProtocol < MiniTest::Unit::TestCase
+class TestShuttlecraftProtocol < Shuttlecraft::Test
 
   def setup
     @protocol = Shuttlecraft::Protocol.new(:MySpecialProtocol, 'Special Snowflake')

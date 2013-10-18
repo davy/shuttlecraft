@@ -1,5 +1,7 @@
+require 'minitest/autorun'
+require 'shuttlecraft'
 
-class TestShuttlecraftHelper
+class Shuttlecraft::Test < MiniTest::Unit::TestCase
 
   class StubRingServer
     def initialize; end
@@ -30,7 +32,8 @@ class TestShuttlecraftHelper
 end
 
 class Rinda::RingFinger
-  def primary
-    TestShuttlecraftHelper::StubRingServer.new
+  def self.primary
+    Shuttlecraft::Test::StubRingServer.new
   end
 end
+

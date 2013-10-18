@@ -1,14 +1,10 @@
-require 'minitest/autorun'
+require 'shuttlecraft/test'
 
-require 'rubygems'
-require 'shuttlecraft'
-require 'test_shuttlecraft_helper'
-
-class TestShuttlecraft < MiniTest::Unit::TestCase
+class TestShuttlecraft < Shuttlecraft::Test
 
   def setup
     @shuttlecraft = Shuttlecraft.new(name: 'Galileo')
-    @shuttlecraft.mothership = TestShuttlecraftHelper::StubMothership.new
+    @shuttlecraft.mothership = Shuttlecraft::Test::StubMothership.new
     @stub_mothership = @shuttlecraft.mothership
   end
 
