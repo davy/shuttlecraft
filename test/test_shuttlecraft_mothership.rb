@@ -67,6 +67,10 @@ class TestShuttlecraftMothership < Shuttlecraft::Test
 
     @@regs = regs
 
+    class << @mothership
+      undef_method :read_registered_services
+    end
+
     def @mothership.read_registered_services
       @@regs.collect{|r| [r, DRb.uri]}
     end

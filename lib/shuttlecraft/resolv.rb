@@ -5,6 +5,8 @@ class Resolv
   class DNS
     class Requester
 
+      remove_method :request
+
       def request(sender, tout)
         start = Time.now
         timelimit = start + tout
@@ -54,7 +56,6 @@ class Resolv
 
       class MDNSOneShot < UnconnectedUDP # :nodoc:
         def sender(msg, data, host, port=Port)
-          service = [host, port]
           id = DNS.allocate_request_id(host, port)
           request = msg.encode
           request[0,2] = [id].pack('n')

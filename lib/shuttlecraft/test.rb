@@ -32,6 +32,10 @@ class Shuttlecraft::Test < MiniTest::Unit::TestCase
 end
 
 class Rinda::RingFinger
+  class << self
+    remove_method :primary
+  end
+
   def self.primary
     Shuttlecraft::Test::StubRingServer.new
   end
