@@ -10,6 +10,7 @@ lib/shuttlecraft.rb
 lib/shuttlecraft/mothership.rb
 lib/shuttlecraft/mothership_app.rb
 lib/shuttlecraft/protocol.rb
+lib/shuttlecraft/resolv.rb
 lib/shuttlecraft/shuttlecraft_app.rb
 lib/shuttlecraft/test.rb
 ringserver.rb
