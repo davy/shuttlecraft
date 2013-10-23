@@ -155,10 +155,22 @@ class Resolv
 end unless Resolv.const_defined? :MDNS
 
 require 'resolv-replace'
+require 'tempfile'
+
+broadcast_hosts = nil
+
+Tempfile.open 'hosts' do |io|
+  io.puts '255.255.255.255 <broadcast>'
+
+  io.flush
+
+  broadcast_hosts = Resolv::Hosts.new io.path
+end
 
 resolvers = [
   Resolv::MDNS.new,
   Resolv::Hosts.new,
+  broadcast_hosts,
   Resolv::DNS.new,
 ]
 
