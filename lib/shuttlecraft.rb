@@ -72,7 +72,7 @@ class Shuttlecraft
   def registered?
     return false unless @mothership
 
-    !@mothership.read_all(Shuttlecraft::REGISTRATION_TEMPLATE).detect{|t| t[1] == @name && t[2] == DRb.uri}.nil?
+    !registered_services.detect{|t| !t.nil? && t[0] == @name && t[1] == DRb.uri}.nil?
   end
 
   def unregister
