@@ -41,6 +41,21 @@ class Shuttlecraft::Mothership
   end
 
   ##
+  # Loops through each client and yields
+  # DRb object for that client
+  def each_client
+    each_service_uri do |uri|
+      begin
+        remote = DRbObject.new_with_uri(uri)
+        yield remote
+      rescue DRb::DRbConnError
+      rescue => e
+        puts "hmm #{e.message}"
+      end
+    end
+  end
+
+  ##
   # Registered services are only updatable if they haven't been updated in the
   # last @update_every seconds. This prevents DRb message spam.
   def update?
