@@ -60,12 +60,20 @@ class Shuttlecraft
 
   # duplicated from mothership
   def registered_services
-    @mothership.read_all(Shuttlecraft::REGISTRATION_TEMPLATE).collect{|_,name,uri| [name,uri]}
+    begin
+      @mothership.read_all(Shuttlecraft::REGISTRATION_TEMPLATE).collect{|_,name,uri| [name,uri]}
+    rescue DRb::DRbConnError
+      []
+    end
   end
 
   def register
     unless @mothership.nil? || registered?
-      @mothership.write([:name, @name, DRb.uri])
+      begin
+        @mothership.write([:name, @name, DRb.uri])
+      rescue DRb::DRbConnError
+        # mothership went away =(
+      end
     end
   end
 
@@ -77,7 +85,11 @@ class Shuttlecraft
 
   def unregister
     if registered?
-      @mothership.take([:name, @name, DRb.uri])
+      begin
+        @mothership.take([:name, @name, DRb.uri])
+      rescue DRb::DRbConnError
+        # mothership went away =(
+      end
     end
   end
 end
