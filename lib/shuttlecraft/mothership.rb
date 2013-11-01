@@ -65,11 +65,21 @@ class Shuttlecraft::Mothership
     update
   end
 
+  ##
+  # Override this method to add custom registration restrictions
+  def allow_registration?
+    true
+  end
+
   def notify_on_registration
     @registration_observer = @ts.notify('write', Shuttlecraft::REGISTRATION_TEMPLATE)
     Thread.new do
       @registration_observer.each do |reg|
         puts "Recieved registration from #{reg[1][1]}"
+        unless allow_registration?
+          puts "Registration not allowed"
+          @ts.take(reg[1])
+        end
       end
     end
   end
