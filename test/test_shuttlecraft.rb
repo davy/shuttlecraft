@@ -12,6 +12,7 @@ class TestShuttlecraft < Shuttlecraft::Test
     assert_equal false, @shuttlecraft.registered?
     assert_equal 'Galileo', @shuttlecraft.name
     assert_equal :Mothership, @shuttlecraft.protocol.service_name
+    assert_equal [], @shuttlecraft.registered_services
   end
 
   def test_each_service_uri
