@@ -59,17 +59,14 @@ class Shuttlecraft::Mothership
   # Registered services are only updatable if they haven't been updated in the
   # last @update_every seconds. This prevents DRb message spam.
   def update?
-    now = Time.now
-
-    return false if @last_update + @update_every > now
-
-    @last_update = now
+    (@last_update + @update_every) < Time.now
   end
 
   ##
   # Retrieves the last registration data from the TupleSpace.
   def update
     return unless update?
+    @last_update = Time.now
     @registered_services = read_registered_services
   end
 

@@ -35,6 +35,8 @@ class TestShuttlecraftMothership < Shuttlecraft::Test
   def test_update_eh
     assert @mothership.update?
 
+    @mothership.update
+
     refute @mothership.update?
   end
 
