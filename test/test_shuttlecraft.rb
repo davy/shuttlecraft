@@ -31,6 +31,15 @@ class TestShuttlecraft < Shuttlecraft::Test
     refute_empty uris
   end
 
+  def test_each_client
+    @shuttlecraft.registered_services << ['name', 'druby://localhost:1234']
+
+    @shuttlecraft.each_client do |client_obj|
+      assert (DRbObject === client_obj)
+      assert_equal 'druby://localhost:1234', client_obj.__drburi
+    end
+  end
+
   def test_uses_default_protocol
     assert_equal Shuttlecraft::Protocol.default, @shuttlecraft.protocol
   end
