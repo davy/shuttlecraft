@@ -15,7 +15,7 @@ class TestShuttlecraft < Shuttlecraft::Test
   end
 
   def test_each_service_uri
-    @stub_mothership.write [:name, 'name', DRb.uri]
+    @shuttlecraft.registered_services << ['name', DRb.uri]
 
     e = @shuttlecraft.each_service_uri
 
@@ -32,6 +32,52 @@ class TestShuttlecraft < Shuttlecraft::Test
 
   def test_uses_default_protocol
     assert_equal Shuttlecraft::Protocol.default, @shuttlecraft.protocol
+  end
+
+  def test_update_eh
+    assert @shuttlecraft.update?
+
+    @shuttlecraft.update
+
+    refute @shuttlecraft.update?
+  end
+
+  def test_update
+    assert_empty @shuttlecraft.registered_services
+
+    make_registrations(%w[Davy Eric])
+
+    assert_empty @shuttlecraft.registered_services
+
+    assert @shuttlecraft.update
+    refute @shuttlecraft.update
+
+    assert_equal %w[Davy Eric], @shuttlecraft.registered_services.collect{|n,u| n}.sort
+  end
+
+  def test_update_bang
+    make_registrations(%w[Davy Eric])
+    assert @shuttlecraft.update
+
+    assert_equal %w[Davy Eric], @shuttlecraft.registered_services.collect{|n,u| n}.sort
+
+    make_registrations(%w[Davy Eric Rein])
+    assert @shuttlecraft.update!
+
+    assert_equal %w[Davy Eric Rein], @shuttlecraft.registered_services.collect{|n,u| n}.sort
+  end
+
+  def make_registrations regs
+
+    @@regs = regs
+
+    class << @shuttlecraft
+      undef_method :read_registered_services
+    end
+
+    def @shuttlecraft.read_registered_services
+      @@regs.collect{|r| [r, DRb.uri]}
+    end
   end
 
   def test_registration

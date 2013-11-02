@@ -12,11 +12,19 @@ class Shuttlecraft
 
   attr_accessor :ring_server, :mothership, :name, :protocol
 
+  ##
+  # Current list of registered_services. Call #update to refresh
+  attr_reader :registered_services
+
   def initialize(opts={})
     @drb = DRb.start_service(nil, self)
 
     @name = opts[:name] || self.default_name
     @protocol = opts[:protocol] || Shuttlecraft::Protocol.default
+
+    @update_every = opts[:update_every] || 2
+    @last_update = Time.at 0
+    @registered_services = []
 
     @ring_server = Rinda::RingFinger.primary
     @receive_loop = nil
@@ -35,7 +43,7 @@ class Shuttlecraft
   def each_service_uri
     return enum_for __method__ unless block_given?
 
-    registered_services.each do |_, uri|
+    @registered_services.each do |_, uri|
       yield uri
     end
   end
@@ -58,8 +66,30 @@ class Shuttlecraft
     end
   end
 
+  ##
+  # Registered services are only updatable if they haven't been updated in the
+  # last @update_every seconds. This prevents DRb message spam.
+  def update?
+    (@last_update + @update_every) < Time.now
+  end
+
+  ##
+  # Retrieves the last registration data from the TupleSpace.
+  def update
+    return unless update?
+    @last_update = Time.now
+    @registered_services = read_registered_services
+  end
+
+  ##
+  # Forces retrieval of registrations from the TupleSpace.
+  def update!
+    @last_update = Time.at 0
+    update
+  end
+
   # duplicated from mothership
-  def registered_services
+  def read_registered_services
     begin
       @mothership.read_all(Shuttlecraft::REGISTRATION_TEMPLATE).collect{|_,name,uri| [name,uri]}
     rescue DRb::DRbConnError
@@ -68,6 +98,7 @@ class Shuttlecraft
   end
 
   def register
+    update!
     unless @mothership.nil? || registered?
       begin
         @mothership.write([:name, @name, DRb.uri])
@@ -78,12 +109,14 @@ class Shuttlecraft
   end
 
   def registered?
+    update!
     return false unless @mothership
 
-    !registered_services.detect{|t| !t.nil? && t[0] == @name && t[1] == DRb.uri}.nil?
+    !@registered_services.detect{|t| !t.nil? && t[0] == @name && t[1] == DRb.uri}.nil?
   end
 
   def unregister
+    update!
     if registered?
       begin
         @mothership.take([:name, @name, DRb.uri])

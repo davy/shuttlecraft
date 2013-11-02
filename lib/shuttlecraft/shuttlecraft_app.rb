@@ -151,7 +151,10 @@ class Shuttlecraft::ShuttlecraftApp
       end
 
       def registrations_text
-        @shuttlecraft.registered_services.join(', ') if @shuttlecraft
+        if @shuttlecraft
+          @shuttlecraft.update
+          @shuttlecraft.registered_services.join(', ')
+        end
       end
 
       launch_screen
