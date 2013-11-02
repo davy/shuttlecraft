@@ -28,14 +28,6 @@ class Shuttlecraft::Mothership
     notify_on_write
   end
 
-  def each_service_uri
-    return enum_for __method__ unless block_given?
-
-    registered_services.each do |_, uri|
-      yield uri
-    end
-  end
-
   ##
   # Loops through each client and yields
   # DRb object for that client

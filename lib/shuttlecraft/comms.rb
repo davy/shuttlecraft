@@ -40,6 +40,14 @@ class Shuttlecraft
       update
     end
 
+    def each_service_uri
+      return enum_for __method__ unless block_given?
+
+      registered_services.each do |_, uri|
+        yield uri
+      end
+    end
+
     private
 
     def read_registered_services

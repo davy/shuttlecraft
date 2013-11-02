@@ -38,14 +38,6 @@ class Shuttlecraft
     temp
   end
 
-  def each_service_uri
-    return enum_for __method__ unless block_given?
-
-    registered_services.each do |_, uri|
-      yield uri
-    end
-  end
-
   def find_all_motherships
     ring_server.read_all(provider_template).collect{|_,_,name,ts| {name: name, ts: ts}}
   end
