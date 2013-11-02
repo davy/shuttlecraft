@@ -41,16 +41,12 @@ class TestShuttlecraftMothership < Shuttlecraft::Test
   end
 
   def test_update
-    assert_empty @mothership.registered_services
-
     make_registrations(%w[Davy Eric])
-
-    assert_empty @mothership.registered_services
 
     assert @mothership.update
     refute @mothership.update
 
-    assert_equal %w[Davy Eric], @mothership.registered_services.collect{|n,u| n}.sort
+    assert_equal %w[Davy Eric], @mothership.registered_services_ary.collect{|n,u| n}.sort
   end
 
   def test_update_bang
@@ -75,6 +71,10 @@ class TestShuttlecraftMothership < Shuttlecraft::Test
 
     def @mothership.read_registered_services
       @@regs.collect{|r| [r, DRb.uri]}
+    end
+
+    def @mothership.registered_services_ary
+      @registered_services_ary
     end
   end
 

@@ -12,10 +12,6 @@ class Shuttlecraft
 
   attr_accessor :ring_server, :mothership, :name, :protocol
 
-  ##
-  # Current list of registered_services. Call #update to refresh
-  attr_reader :registered_services
-
   def initialize(opts={})
     @drb = DRb.start_service(nil, self)
 
@@ -24,7 +20,7 @@ class Shuttlecraft
 
     @update_every = opts[:update_every] || 2
     @last_update = Time.at 0
-    @registered_services = []
+    @registered_services_ary = []
 
     @ring_server = Rinda::RingFinger.primary
     @receive_loop = nil
@@ -43,7 +39,7 @@ class Shuttlecraft
   def each_service_uri
     return enum_for __method__ unless block_given?
 
-    @registered_services.each do |_, uri|
+    registered_services.each do |_, uri|
       yield uri
     end
   end
@@ -78,7 +74,7 @@ class Shuttlecraft
   def update
     return unless update?
     @last_update = Time.now
-    @registered_services = read_registered_services
+    @registered_services_ary = read_registered_services
   end
 
   ##
@@ -86,6 +82,11 @@ class Shuttlecraft
   def update!
     @last_update = Time.at 0
     update
+  end
+
+  def registered_services
+    update
+    @registered_services_ary
   end
 
   # duplicated from mothership
@@ -112,7 +113,7 @@ class Shuttlecraft
     update!
     return false unless @mothership
 
-    !@registered_services.detect{|t| !t.nil? && t[0] == @name && t[1] == DRb.uri}.nil?
+    !registered_services.detect{|t| !t.nil? && t[0] == @name && t[1] == DRb.uri}.nil?
   end
 
   def unregister

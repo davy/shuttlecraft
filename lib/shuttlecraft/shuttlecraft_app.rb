@@ -152,7 +152,6 @@ class Shuttlecraft::ShuttlecraftApp
 
       def registrations_text
         if @shuttlecraft
-          @shuttlecraft.update
           @shuttlecraft.registered_services.join(', ')
         end
       end

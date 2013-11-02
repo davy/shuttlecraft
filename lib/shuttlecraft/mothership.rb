@@ -5,10 +5,6 @@ class Shuttlecraft::Mothership
 
   attr_reader :ts, :provider, :name, :protocol
 
-  ##
-  # Current list of registered_services. Call #update to refresh
-  attr_reader :registered_services
-
   def initialize(opts={})
     @drb = DRb.start_service
 
@@ -17,7 +13,7 @@ class Shuttlecraft::Mothership
 
     @update_every = opts[:update_every] || 2
     @last_update = Time.at 0
-    @registered_services = []
+    @registered_services_ary = []
 
     @ts = Rinda::TupleSpace.new
 
@@ -35,7 +31,7 @@ class Shuttlecraft::Mothership
   def each_service_uri
     return enum_for __method__ unless block_given?
 
-    @registered_services.each do |_, uri|
+    registered_services.each do |_, uri|
       yield uri
     end
   end
@@ -67,7 +63,7 @@ class Shuttlecraft::Mothership
   def update
     return unless update?
     @last_update = Time.now
-    @registered_services = read_registered_services
+    @registered_services_ary = read_registered_services
   end
 
   ##
@@ -75,6 +71,11 @@ class Shuttlecraft::Mothership
   def update!
     @last_update = Time.at 0
     update
+  end
+
+  def registered_services
+    update
+    @registered_services_ary
   end
 
   ##
@@ -115,7 +116,11 @@ class Shuttlecraft::Mothership
   private
 
   def read_registered_services
-    @ts.read_all(Shuttlecraft::REGISTRATION_TEMPLATE).collect{|_,name,uri| [name,uri]}
+    begin
+      @ts.read_all(Shuttlecraft::REGISTRATION_TEMPLATE).collect{|_,name,uri| [name,uri]}
+    rescue DRb::DRbConnError
+      []
+    end
   end
 end
 

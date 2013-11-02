@@ -44,16 +44,12 @@ class TestShuttlecraft < Shuttlecraft::Test
   end
 
   def test_update
-    assert_empty @shuttlecraft.registered_services
-
     make_registrations(%w[Davy Eric])
-
-    assert_empty @shuttlecraft.registered_services
 
     assert @shuttlecraft.update
     refute @shuttlecraft.update
 
-    assert_equal %w[Davy Eric], @shuttlecraft.registered_services.collect{|n,u| n}.sort
+    assert_equal %w[Davy Eric], @shuttlecraft.registered_services_ary.collect{|n,u| n}.sort
   end
 
   def test_update_bang
@@ -78,6 +74,10 @@ class TestShuttlecraft < Shuttlecraft::Test
 
     def @shuttlecraft.read_registered_services
       @@regs.collect{|r| [r, DRb.uri]}
+    end
+
+    def @shuttlecraft.registered_services_ary
+      @registered_services_ary
     end
   end
 
