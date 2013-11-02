@@ -40,6 +40,8 @@ class Shuttlecraft
       update
     end
 
+    ##
+    # Enumerates through each registered service's uri
     def each_service_uri
       return enum_for __method__ unless block_given?
 
