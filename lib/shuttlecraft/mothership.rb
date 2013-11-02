@@ -3,17 +3,17 @@ require 'rinda/tuplespace'
 
 class Shuttlecraft::Mothership
 
+  include Shuttlecraft::Comms
+
   attr_reader :ts, :provider, :name, :protocol
 
   def initialize(opts={})
+    initialize_comms(opts)
+
     @drb = DRb.start_service
 
     @protocol = opts[:protocol] || Shuttlecraft::Protocol.default
     @name = opts[:name] || @protocol.name
-
-    @update_every = opts[:update_every] || 2
-    @last_update = Time.at 0
-    @registered_services_ary = []
 
     @ts = Rinda::TupleSpace.new
 
@@ -49,33 +49,6 @@ class Shuttlecraft::Mothership
         puts "hmm #{e.message}"
       end
     end
-  end
-
-  ##
-  # Registered services are only updatable if they haven't been updated in the
-  # last @update_every seconds. This prevents DRb message spam.
-  def update?
-    (@last_update + @update_every) < Time.now
-  end
-
-  ##
-  # Retrieves the last registration data from the TupleSpace.
-  def update
-    return unless update?
-    @last_update = Time.now
-    @registered_services_ary = read_registered_services
-  end
-
-  ##
-  # Forces retrieval of registrations from the TupleSpace.
-  def update!
-    @last_update = Time.at 0
-    update
-  end
-
-  def registered_services
-    update
-    @registered_services_ary
   end
 
   ##
@@ -115,13 +88,12 @@ class Shuttlecraft::Mothership
 
   private
 
-  def read_registered_services
-    begin
-      @ts.read_all(Shuttlecraft::REGISTRATION_TEMPLATE).collect{|_,name,uri| [name,uri]}
-    rescue DRb::DRbConnError
-      []
-    end
+  ##
+  # For Shuttlecraft::Comms
+  def tuplespace
+    @ts
   end
+
 end
 
 if __FILE__ == $0
