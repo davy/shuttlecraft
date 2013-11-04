@@ -28,20 +28,6 @@ class Shuttlecraft::Mothership
     notify_on_write
   end
 
-  ##
-  # Loops through each client and yields
-  # DRb object for that client
-  def each_client
-    each_service_uri do |uri|
-      begin
-        remote = DRbObject.new_with_uri(uri)
-        yield remote
-      rescue DRb::DRbConnError
-      rescue => e
-        puts "hmm #{e.message}"
-      end
-    end
-  end
 
   ##
   # Override this method to add custom registration restrictions
