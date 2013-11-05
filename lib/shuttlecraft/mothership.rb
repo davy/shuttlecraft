@@ -14,6 +14,7 @@ class Shuttlecraft::Mothership
 
     @protocol = opts[:protocol] || Shuttlecraft::Protocol.default
     @name = opts[:name] || @protocol.name
+    @verbose = opts[:verbose] || false
 
     @ts = Rinda::TupleSpace.new
 
@@ -39,12 +40,12 @@ class Shuttlecraft::Mothership
     @registration_observer = @ts.notify('write', Shuttlecraft::REGISTRATION_TEMPLATE)
     Thread.new do
       @registration_observer.each do |reg|
-        puts "Recieved registration from #{reg[1][1]}"
+        puts "Recieved registration from #{reg[1][1]}" if @verbose
         if allow_registration?
           update!
           send(:on_registration) if respond_to? :on_registration
         else
-          puts "Registration not allowed"
+          puts "Registration not allowed" if @verbose
           @ts.take(reg[1])
         end
       end
@@ -55,7 +56,7 @@ class Shuttlecraft::Mothership
     @unregistration_observer = @ts.notify('take', Shuttlecraft::REGISTRATION_TEMPLATE)
     Thread.new do
       @unregistration_observer.each do |reg|
-        puts "Recieved unregistration from #{reg[1][1]}"
+        puts "Recieved unregistration from #{reg[1][1]}" if @verbose
         update!
         send(:on_unregistration) if respond_to? :on_unregistration
       end

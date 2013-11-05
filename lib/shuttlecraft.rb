@@ -23,6 +23,7 @@ class Shuttlecraft
 
     @name = opts[:name] || self.default_name
     @protocol = opts[:protocol] || Shuttlecraft::Protocol.default
+    @verbose = opts[:verbose] || false
 
     @ring_server = Rinda::RingFinger.primary
     @receive_loop = nil

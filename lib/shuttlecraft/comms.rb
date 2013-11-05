@@ -60,7 +60,7 @@ class Shuttlecraft
           yield remote
         rescue DRb::DRbConnError
         rescue => e
-          puts "hmm #{e.message}"
+          puts "Error sending message to client: #{e.message}" if @verbose
         end
       end
     end
