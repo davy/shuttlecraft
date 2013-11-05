@@ -40,7 +40,9 @@ class Shuttlecraft::Mothership
     Thread.new do
       @registration_observer.each do |reg|
         puts "Recieved registration from #{reg[1][1]}"
-        unless allow_registration?
+        if allow_registration?
+          send(:on_registration) if respond_to? :on_registration
+        else
           puts "Registration not allowed"
           @ts.take(reg[1])
         end
@@ -53,6 +55,7 @@ class Shuttlecraft::Mothership
     Thread.new do
       @unregistration_observer.each do |reg|
         puts "Recieved unregistration from #{reg[1][1]}"
+        send(:on_unregistration) if respond_to? :on_unregistration
       end
     end
   end
