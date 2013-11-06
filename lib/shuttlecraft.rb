@@ -21,7 +21,7 @@ class Shuttlecraft
 
     @drb = DRb.start_service(nil, self)
 
-    @name = opts[:name] || self.default_name
+    @name = opts[:name] || self.class.default_name
     @protocol = opts[:protocol] || Shuttlecraft::Protocol.default
     @verbose = opts[:verbose] || false
 

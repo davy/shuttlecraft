@@ -1,5 +1,11 @@
 require 'shuttlecraft/test'
 
+class Shuttlecraft::Override < Shuttlecraft
+  def self.default_name
+    'Override'
+  end
+end
+
 class TestShuttlecraft < Shuttlecraft::Test
 
   def setup
@@ -13,6 +19,16 @@ class TestShuttlecraft < Shuttlecraft::Test
     assert_equal 'Galileo', @shuttlecraft.name
     assert_equal :Mothership, @shuttlecraft.protocol.service_name
     assert_equal [], @shuttlecraft.registered_services
+  end
+
+  def test_empty_initialization
+    @shuttlecraft = Shuttlecraft.new
+    assert_equal 'Shuttlecraft', @shuttlecraft.name
+  end
+
+  def test_default_name_override
+    @shuttlecraft = Shuttlecraft::Override.new
+    assert_equal 'Override', @shuttlecraft.name
   end
 
   def test_each_service_uri
