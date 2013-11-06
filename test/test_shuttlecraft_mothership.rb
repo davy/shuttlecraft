@@ -12,6 +12,13 @@ class TestShuttlecraftMothership < Shuttlecraft::Test
     assert_equal [], @mothership.registered_services
   end
 
+  def test_protocol
+    @mothership = Shuttlecraft::Mothership.new(protocol: Shuttlecraft::Protocol.new(:Foo, "Foobar"))
+
+    assert_equal 'Foobar', @mothership.name
+    assert_equal :Foo, @mothership.protocol.service_name
+  end
+
   def test_each_service_uri
     @mothership.registered_services << ['name', DRb.uri]
 
