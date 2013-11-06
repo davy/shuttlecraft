@@ -39,7 +39,7 @@ Play!
 
 ## INSTALL:
 
-        $ sudo gem install shuttlecraft
+        $ rake install_gem
 
 ## DEVELOPERS:
 
