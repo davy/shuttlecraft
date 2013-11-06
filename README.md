@@ -4,26 +4,23 @@
 
 ## DESCRIPTION:
 
-The goal for this project is to create an easy-to-use wrapper for a lot of the functionality in Rinda. 
+Shuttlecraft is an easy-to-use wrapper for much of the functionality in Rinda. 
 
-Create a Shuttlecraft::Mothership to manage the RingServer and RingProvider, and then many Shuttlecrafts can easily connect to the Mothership.
+Create a Shuttlecraft::Mothership to manage the RingServer and RingProvider, and then many Shuttlecrafts can easily connect to the Mothership. Registration management is easy and automatic.
 
-What is yet to be created is some sort of way to make it easy to define an interface that a Mothership and Shuttlecraft can use to communicate with each other. This interface would define the tuplespace message structure and the actions that would be performed on each side for a given message.
+Easily broadcast messages to all registered services (ie. Shuttlecrafts) from either the Mothership or a particular Shuttlecraft.
 
-## FEATURES/PROBLEMS:
-
-* FIX (list of features or problems)
 
 ## SYNOPSIS:
 
 Running the apps
 ----------------
 
-Requires [shoes4](https://github.com/shoes/shoes4)
+Requires [shoes4](https://github.com/shoes/shoes4). Shoes4 is under active development! Apps tested against commit 7d0a1eefea601917dd01419b14ded2812d0acb9f.
 
-Make sure you are running a ring server
+Make sure you are running a ring server (via [RingyDingy](https://github.com/drbrain/RingyDingy))
 
-        $ ./ringserver.rb
+        $ ring_server
         
 Run Mothership
 
@@ -42,7 +39,7 @@ Play!
 
 ## INSTALL:
 
-* FIX (sudo gem install, anything else)
+        $ sudo gem install shuttlecraft
 
 ## DEVELOPERS:
 
