@@ -16,7 +16,7 @@ Easily broadcast messages to all registered services (ie. Shuttlecrafts) from ei
 Running the apps
 ----------------
 
-Requires [shoes4](https://github.com/shoes/shoes4). Shoes4 is under active development! Apps tested against commit 7d0a1eefea601917dd01419b14ded2812d0acb9f.
+Requires [shoes4](https://github.com/shoes/shoes4). Shoes4 is under active development! Apps tested against commit [7d0a1ee](https://github.com/shoes/shoes4/commit/7d0a1eefea601917dd01419b14ded2812d0acb9f).
 
 Make sure you are running a ring server (via [RingyDingy](https://github.com/drbrain/RingyDingy))
 
