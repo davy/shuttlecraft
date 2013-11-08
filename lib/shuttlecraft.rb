@@ -97,7 +97,6 @@ end
 
 require 'shuttlecraft/mothership'
 require 'shuttlecraft/protocol'
-require 'shuttlecraft/resolv'
 require 'shuttlecraft/mothership_app'
 require 'shuttlecraft/shuttlecraft_app'
 
